@@ -1,7 +1,7 @@
 var cnv;
 var players = [];
 var world = [];
-var gravity = 0.5;
+var gravity = 1;
 
 function setup(){
    cnv = createCanvas(window.innerWidth, window.innerHeight);

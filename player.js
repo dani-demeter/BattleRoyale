@@ -16,15 +16,20 @@ function Player(I) {
    };
 
    I.update = function() {
-      var col = false;
+      var collision = {};
       world.forEach(w => {
-         if(collidesWith(I, w)){
-            col = true;
+         var c = collidesWith(I, w)
+         if(c.col){
+            collision = c;
+            collision.obj = w;
          }
       });
-      if(!col){
+      if(!collision.col){
          this.yv += gravity;
       }else{
+         if(collision.dir==2){
+            this.y = collision.obj.y-this.height;
+         }
          this.yv = 0;
       }
       this.y += this.yv;
