@@ -16,7 +16,17 @@ function Player(I) {
    };
 
    I.update = function() {
-      this.yv += gravity;
+      var col = false;
+      world.forEach(w => {
+         if(collidesWith(I, w)){
+            col = true;
+         }
+      });
+      if(!col){
+         this.yv += gravity;
+      }else{
+         this.yv = 0;
+      }
       this.y += this.yv;
       if(keyIsDown(LEFT_ARROW)){
          this.x -= 1;
