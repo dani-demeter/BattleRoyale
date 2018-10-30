@@ -1,5 +1,7 @@
 var cnv;
 var players = [];
+var world = [];
+var gravity = 0.5;
 
 function setup(){
    cnv = createCanvas(window.innerWidth, window.innerHeight);
@@ -7,6 +9,13 @@ function setup(){
       x: 300,
       y: 200,
       color: color(158,0,49)
+   }));
+   world.push(WorldObject({
+      x: 100,
+      y: 400,
+      width: 400,
+      height: 20,
+      color: color(255, 199, 0)
    }));
 }
 
@@ -42,6 +51,9 @@ function drawBackground(){
 
 function repaint(){
    drawBackground();
+   world.forEach(o => {
+      o.draw();
+   });
    players.forEach(p => {
       p.draw();
    });
