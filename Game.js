@@ -10,20 +10,11 @@ function setup(){
       y: 200,
       color: color(158,0,49)
    }));
-   world.push(WorldObject({
-      x: 100,
-      y: 400,
-      width: 400,
-      height: 20,
-      color: color(255, 199, 0)
-   }));
-   world.push(WorldObject({
-      x: 400,
-      y: 300,
-      width: 400,
-      height: 30,
-      color: color(255, 199, 0)
-   }));
+   addWorldObject(100,400,400,50,color(255, 199, 0));
+   addWorldObject(400,300,400,50,color(255, 199, 0));
+   addWorldObject(50,100,50,400,color(255, 199, 0));
+   addWorldObject(800,100,50,400,color(255, 199, 0));
+   addWorldObject(50,500,800,30,color(255, 199, 0));
 }
 
 var FPS = 30;
@@ -41,6 +32,16 @@ function update(){
    players.forEach(p => {
       p.update();
    });
+}
+
+function addWorldObject(x, y, w, h, c){
+   world.push(WorldObject({
+      x,
+      y,
+      width: w,
+      height: h,
+      color: c
+   }));
 }
 
 function recenterCanvas(){

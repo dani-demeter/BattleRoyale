@@ -13,7 +13,7 @@ function Player(I) {
   I.maxjumpsleft = 1;
   I.spacedown = false;
    I.draw = function() {
-      strokeWeight(2);
+      strokeWeight(1);
       stroke(this.color);
       rect(this.x, this.y, this.width, this.height);
    };
@@ -74,6 +74,8 @@ function Player(I) {
                this.nx = c.obj.x - this.width;
             }
          });
+      }else{
+         this.grounded = false;
       }
    };
 
