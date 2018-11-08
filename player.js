@@ -93,13 +93,9 @@ function Player(I) {
    };
 
    I.mousePressed = function(){
-      if(I.equipped.lastfired+I.equipped.reload<Date.now()){
+      if(I.equipped.lastfired+I.equipped.reload*1000<Date.now()){
          I.equipped.windup(Date.now());
       }
-      // this.projectiles.push(Projectile({
-      //    xc: I.xc-xhair.uv[0]*I.r,
-      //    yc: I.yc-xhair.uv[1]*I.r
-      // }));
    };
    I.mouseReleased = function(){
       var dmg = 0;
@@ -111,7 +107,6 @@ function Player(I) {
          yc: I.yc-xhair.uv[1]*I.r,
          dmg
       }));
-      console.log(dmg);
    };
 
   return I;

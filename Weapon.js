@@ -7,7 +7,7 @@ function Weapon(I) {
    I.windupl = 3;
    I.lastfired = 0;
    I.windstart = 0;
-   I.reload = 2;
+   I.reload = 1;
    I.winding = false;
 
    I.windup = function(wtime) {
@@ -19,7 +19,7 @@ function Weapon(I) {
       if(I.winding){
          return (Date.now()-I.windstart)/(1000*I.windupl);
       }else{
-         return 0;
+         return (1000*I.reload-Date.now()+I.lastfired)/(1000*I.reload);
       }
    }
 
