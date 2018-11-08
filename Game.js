@@ -10,7 +10,10 @@ function setup(){
    players.push(Player({
       x: 300,
       y: 200,
-      color: color(158,0,49)
+      color: color(158,0,49),
+      equipped: Weapon({
+
+      })
    }));
    localPlayer = players[0];
    xhair = XHair({
@@ -77,11 +80,21 @@ function repaint(){
          p.draw();
       });
       xhair.draw();
+      drawHealth();
    }
+}
+function drawHealth(){
+   noStroke();
+   fill(color(245, 240, 246));
+   rect(50, window.innerHeight-50, 100, 20);
+   fill(color(245, 0,0));
+   rect(52, window.innerHeight-48, 96*localPlayer.health/100, 16);
+
 }
 
 function mousePressed(){
-   players.forEach(p => {
-      p.mousePressed();
-   });
+   localPlayer.mousePressed();
+}
+function mouseReleased(){
+   localPlayer.mouseReleased();
 }

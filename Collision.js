@@ -13,6 +13,7 @@ function collidesWith(a, b){ //a is moving, b is static
    }
    return res;
 }
+
 function findDir(a, b){
    var isAbovePos = aboveLine(a, {x: b.x, y: (b.y+b.height)}, {x: (b.x+b.width), y: b.y});
    var isAboveNeg = aboveLine(a, {x: b.x, y: b.y}, {x: (b.x+b.width), y: (b.y+b.height)});

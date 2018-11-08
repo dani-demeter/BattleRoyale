@@ -14,9 +14,9 @@ function Player(I) {
    I.jumpsLeft = 1;
    I.maxjumpsleft = 1;
    I.spacedown = false;
-   I.vu = [];
    I.projectiles = [];
-
+   I.health = 50;
+   I.r = 2+Math.sqrt(I.width*I.width+I.height*I.height)/2;
    I.draw = function() {
       strokeWeight(1);
       stroke(this.color);
@@ -93,10 +93,25 @@ function Player(I) {
    };
 
    I.mousePressed = function(){
+      if(I.equipped.lastfired+I.equipped.reload<Date.now()){
+         I.equipped.windup(Date.now());
+      }
+      // this.projectiles.push(Projectile({
+      //    xc: I.xc-xhair.uv[0]*I.r,
+      //    yc: I.yc-xhair.uv[1]*I.r
+      // }));
+   };
+   I.mouseReleased = function(){
+      var dmg = 0;
+      if(I.equipped.winding){
+         dmg = I.equipped.shoot(Date.now());
+      }
       this.projectiles.push(Projectile({
-         xc: I.xc,
-         yc: I.yc
+         xc: I.xc-xhair.uv[0]*I.r,
+         yc: I.yc-xhair.uv[1]*I.r,
+         dmg
       }));
+      console.log(dmg);
    };
 
   return I;

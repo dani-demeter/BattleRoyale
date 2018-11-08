@@ -8,7 +8,10 @@ function XHair(I) {
       stroke(color(245,240,246));
       strokeWeight(1);
       noFill();
-      ellipse(this.xc, this.yc, 2*this.r, 2*this.r, 1);
+      ellipse(this.xc, this.yc, 2*this.r);
+      fill(color(255, 0,0));
+      noStroke();
+      ellipse(this.xc, this.yc, constrain(2*(localPlayer.equipped.pdone()*I.r), 0, 2*I.r));
    };
 
    I.update = function() {
