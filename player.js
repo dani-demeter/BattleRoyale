@@ -1,21 +1,30 @@
 function Player(I) {
-  I.xv = 0;
-  I.yv = 0;
-  I.nx = I.x;
-  I.ny = I.y;
-  I.width = 30;
-  I.height = 30;
-  I.maxv = 20;
-  I.grounded = false;
-  I.jumpV = 20;
-  I.horiV = 5;
-  I.jumpsLeft = 1;
-  I.maxjumpsleft = 1;
-  I.spacedown = false;
+   I.xv = 0;
+   I.yv = 0;
+   I.xc = 0;
+   I.yc = 0;
+   I.nx = I.x;
+   I.ny = I.y;
+   I.width = 30;
+   I.height = 30;
+   I.maxv = 20;
+   I.grounded = false;
+   I.jumpV = 15;
+   I.horiV = 5;
+   I.jumpsLeft = 1;
+   I.maxjumpsleft = 1;
+   I.spacedown = false;
+   I.vu = [];
+   I.projectiles = [];
+
    I.draw = function() {
       strokeWeight(1);
       stroke(this.color);
+      noFill();
       rect(this.x, this.y, this.width, this.height);
+      this.projectiles.forEach(p => {
+         p.draw();
+      });
    };
 
    I.update = function() {
@@ -25,9 +34,9 @@ function Player(I) {
       if(this.yv+gravity<this.maxv){
          this.yv += gravity;
       }
-      if(keyIsDown(LEFT_ARROW)){
+      if(keyIsDown(65)){
          this.nx = this.x - this.horiV;
-      }else if(keyIsDown(RIGHT_ARROW)){
+      }else if(keyIsDown(68)){
          this.nx = this.x + this.horiV;
       }
       if(keyIsDown(32)){
@@ -47,7 +56,6 @@ function Player(I) {
       }
       constrain(this.yv, -this.maxv, this.maxv);
       this.ny = this.y + this.yv;
-
 
       var collisions = [];
       var needGravity = true;
@@ -77,6 +85,18 @@ function Player(I) {
       }else{
          this.grounded = false;
       }
+      this.xc = this.x + this.width/2.0;
+      this.yc = this.y + this.height/2.0;
+      this.projectiles.forEach(p => {
+         p.update();
+      });
+   };
+
+   I.mousePressed = function(){
+      this.projectiles.push(Projectile({
+         xc: I.xc,
+         yc: I.yc
+      }));
    };
 
   return I;
