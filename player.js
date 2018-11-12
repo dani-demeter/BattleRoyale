@@ -20,7 +20,8 @@ function Player(I) {
    I.draw = function() {
       strokeWeight(1);
       stroke(this.color);
-      noFill();
+      // noFill();
+      fill(this.color);
       rect(this.x, this.y, this.width, this.height);
       this.projectiles.forEach(p => {
          p.draw();
@@ -30,6 +31,11 @@ function Player(I) {
    I.update = function() {
       this.y = this.ny;
       this.x = this.nx;
+      pups.forEach(pup => {
+         if(simpleCollidesWith(I, pup)){
+            pup.pick(I);
+         }
+      });
 
       if(this.yv+gravity<this.maxv){
          this.yv += gravity;
@@ -92,21 +98,29 @@ function Player(I) {
       });
    };
 
+   I.removeProjectile = function(p){
+      for(var i = 0; i < I.projectiles.length; i++){
+         if ( I.projectiles[i] == p) {
+           I.projectiles.splice(i, 1);
+         }
+      }
+   }
+
    I.mousePressed = function(){
       if(I.equipped.lastfired+I.equipped.reload*1000<Date.now()){
          I.equipped.windup(Date.now());
       }
    };
    I.mouseReleased = function(){
-      var dmg = 0;
       if(I.equipped.winding){
+         var dmg = 0;
          dmg = I.equipped.shoot(Date.now());
+         this.projectiles.push(Projectile({
+            xc: I.xc-xhair.uv[0]*I.r,
+            yc: I.yc-xhair.uv[1]*I.r,
+            dmg
+         }));
       }
-      this.projectiles.push(Projectile({
-         xc: I.xc-xhair.uv[0]*I.r,
-         yc: I.yc-xhair.uv[1]*I.r,
-         dmg
-      }));
    };
 
   return I;

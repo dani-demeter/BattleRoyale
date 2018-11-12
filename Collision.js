@@ -1,9 +1,6 @@
 function collidesWith(a, b){ //a is moving, b is static
    var res = {};
-   if(a.x < b.x + b.width &&
-      a.x + a.width > b.x &&
-      a.y < b.y + b.height &&
-      a.y + a.height > b.y){
+   if(simpleCollidesWith(a, b)){
          var acx = a.x+a.width/2;
          var acy = a.y+a.height/2;
          res.dir = findDir({x:acx, y:acy}, b);
@@ -12,6 +9,13 @@ function collidesWith(a, b){ //a is moving, b is static
       res.col = false;
    }
    return res;
+}
+
+function simpleCollidesWith(a, b){
+   return (a.x < b.x + b.width &&
+      a.x + a.width > b.x &&
+      a.y < b.y + b.height &&
+      a.y + a.height > b.y);
 }
 
 function findDir(a, b){

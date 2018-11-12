@@ -4,7 +4,7 @@ function Weapon(I) {
    I.speed = 6;
    I.mindmg = 5;
    I.maxdmg = 25;
-   I.windupl = 3;
+   I.windupl = 2;
    I.lastfired = 0;
    I.windstart = 0;
    I.reload = 1;
@@ -30,17 +30,6 @@ function Weapon(I) {
       var dmg = Math.floor((I.maxdmg-I.mindmg)*pw)+I.mindmg;
       return dmg;
    }
-   // I.draw = function() {
-   //    strokeWeight(2);
-   //    stroke(color((18,234,234)));
-   //    noFill();
-   //    ellipse(I.xc, I.yc, I.width, I.height);
-   // };
-
-   // I.update = function() {
-   //    I.xc -= I.vx;
-   //    I.yc -= I.vy;
-   // };
 
    return I;
 }

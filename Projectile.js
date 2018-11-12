@@ -15,6 +15,11 @@ function Projectile(I) {
    I.update = function() {
       I.xc -= I.vx;
       I.yc -= I.vy;
+      world.forEach(w => {
+         if(simpleCollidesWith({x: I.xc-I.width/2, y: I.yc-I.height/2, width: I.width, height: I.height}, w)){
+            localPlayer.removeProjectile(I);
+         }
+      });
    };
 
    return I;

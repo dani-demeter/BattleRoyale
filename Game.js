@@ -2,6 +2,7 @@ var cnv;
 var players = [];
 var localPlayer;
 var world = [];
+var pups = [];
 var gravity = 1;
 var xhair;
 var allset = false;
@@ -24,6 +25,8 @@ function setup(){
    addWorldObject(50,100,50,400,color(255, 199, 0));
    addWorldObject(800,100,50,400,color(255, 199, 0));
    addWorldObject(50,500,800,30,color(255, 199, 0));
+   addPup(150, 380, 20, 20);
+   addPup(480, 280, 20, 20);
    allset = true;
 }
 
@@ -57,6 +60,15 @@ function addWorldObject(x, y, w, h, c){
    }));
 }
 
+function addPup(x, y, w, h){
+   pups.push(PickUp({
+      x,
+      y,
+      width: w,
+      height: h,
+   }));
+}
+
 function recenterCanvas(){
    var x = (window.innerWidth - width) / 2;
    var y = (window.innerHeight - height) / 2;
@@ -75,6 +87,9 @@ function repaint(){
    if(allset){
       world.forEach(o => {
          o.draw();
+      });
+      pups.forEach(p => {
+         p.draw();
       });
       players.forEach(p => {
          p.draw();
