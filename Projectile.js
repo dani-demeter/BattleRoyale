@@ -1,10 +1,9 @@
 function Projectile(I) {
-   I.width = 6*Math.ceil(I.dmg/25);
-   I.height = 6*Math.ceil(I.dmg/25);
-   I.speed = 6;
+   I.width = 3*Math.ceil(6.0*I.dmg/25);
+   I.height = 3*Math.ceil(6.0*I.dmg/25);
    I.vx = xhair.uv[0]*I.speed;
    I.vy = xhair.uv[1]*I.speed;
-   I.mycolor = color(10*I.dmg, 50, 100);
+   I.mycolor = color(10*I.dmg, 50, 0);
    I.draw = function() {
       strokeWeight(2);
       stroke(I.mycolor);

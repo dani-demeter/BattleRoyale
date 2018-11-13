@@ -96,32 +96,39 @@ function Player(I) {
       this.projectiles.forEach(p => {
          p.update();
       });
+      this.equipped.update();
    };
 
    I.removeProjectile = function(p){
       for(var i = 0; i < I.projectiles.length; i++){
-         if ( I.projectiles[i] == p) {
+         if (I.projectiles[i] == p) {
            I.projectiles.splice(i, 1);
          }
       }
    }
 
    I.mousePressed = function(){
-      if(I.equipped.lastfired+I.equipped.reload*1000<Date.now()){
-         I.equipped.windup(Date.now());
+      if(I.equipped.lastfired+I.equipped.reload*1000<millis()){
+         I.equipped.windup(millis());
       }
    };
+   
    I.mouseReleased = function(){
+      I.shoot();
+   };
+
+   I.shoot = function(){
       if(I.equipped.winding){
          var dmg = 0;
-         dmg = I.equipped.shoot(Date.now());
+         dmg = I.equipped.shoot(millis());
          this.projectiles.push(Projectile({
             xc: I.xc-xhair.uv[0]*I.r,
             yc: I.yc-xhair.uv[1]*I.r,
+            speed: I.equipped.speed,
             dmg
          }));
       }
-   };
+   }
 
   return I;
 }

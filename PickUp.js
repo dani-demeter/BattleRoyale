@@ -7,6 +7,9 @@ function PickUp(I) {
    };
 
    I.pick = function(p){
+      p.equipped = Weapon({
+         speed: 10
+      });
       p.health += 10;
       for(var i = 0; i<pups.length; i++){
          if(pups[i] == I){

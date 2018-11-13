@@ -13,7 +13,7 @@ function setup(){
       y: 200,
       color: color(158,0,49),
       equipped: Weapon({
-
+         speed: 2
       })
    }));
    localPlayer = players[0];
@@ -43,9 +43,7 @@ function gameLoop(){
 
 function update(){
    if(allset){
-      players.forEach(p => {
-         p.update();
-      });
+      localPlayer.update();
       xhair.update();
    }
 }
