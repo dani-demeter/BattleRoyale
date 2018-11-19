@@ -6,19 +6,41 @@ var pups = [];
 var gravity = 1;
 var xhair;
 var allset = false;
+var username;
 function setup(){
+   var mycolor;
+   username = readCookie("username");
+   if(username!=""){
+      mycolor = color(parseInt(readCookie("r")), parseInt(readCookie("g")), parseInt(readCookie("b")));
+      continueSetup(mycolor);
+   }else{
+      window.location = '/';
+   }
+}
+
+function continueSetup(mycolor){
    cnv = createCanvas(window.innerWidth, window.innerHeight);
-   players.push(Player({
-      x: 300,
-      y: 200,
-      color: color(158,0,49),
-      equipped: Weapon({
-         speed: 2
-      })
-   }));
-   localPlayer = players[0];
+   localPlayer = Player({
+      core: {
+         x: 300,
+         y: 200,
+         width: 30,
+         height: 30,
+         color: mycolor,
+         health: 50,
+         equipped: Weapon({
+            speed: 2
+         })
+      }
+   });
+   players.push(localPlayer);
+   // httpPost("/setPlayer", {usr: "dd", pass: "pass", player: JSON.stringify(localPlayer.core)}, (res) => {
+   //    // localPlayer.core = JSON.parse(res);
+   //    // console.log(localPlayer.core);
+   //    // console.log(localPlayer);
+   // });
    xhair = XHair({
-      p: players[0]
+      p: localPlayer
    });
    addWorldObject(100,400,400,50,color(255, 199, 0));
    addWorldObject(400,300,400,50,color(255, 199, 0));
@@ -68,9 +90,10 @@ function addPup(x, y, w, h){
 }
 
 function recenterCanvas(){
-   var x = (window.innerWidth - width) / 2;
-   var y = (window.innerHeight - height) / 2;
-   cnv.position(x, y);
+   // var x = (window.innerWidth - width) / 2;
+   // var y = (window.innerHeight - height) / 2;
+   // cnv.position(x, y);
+   cnv.position(0,0);
 }
 
 function drawBackground(){
@@ -101,7 +124,7 @@ function drawHealth(){
    fill(color(245, 240, 246));
    rect(50, window.innerHeight-50, 100, 20);
    fill(color(245, 0,0));
-   rect(52, window.innerHeight-48, 96*localPlayer.health/100, 16);
+   rect(52, window.innerHeight-48, 96*localPlayer.core.health/100, 16);
 
 }
 
@@ -110,4 +133,19 @@ function mousePressed(){
 }
 function mouseReleased(){
    localPlayer.mouseReleased();
+}
+
+function onServerMessage(msg){
+   console.log(msg);
+}
+
+function readCookie(key){
+   var cookies = document.cookie.split(";");
+   for(var i = 0; i<cookies.length; i++){
+      cookies[i] = cookies[i].trim();
+      if(cookies[i].startsWith(key)){
+         return(cookies[i].substring(key.length+1));
+      }
+   }
+   return "";
 }

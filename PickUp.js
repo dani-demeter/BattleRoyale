@@ -7,10 +7,11 @@ function PickUp(I) {
    };
 
    I.pick = function(p){
-      p.equipped = Weapon({
+      console.log("picked");
+      p.core.equipped = Weapon({
          speed: 10
       });
-      p.health += 10;
+      p.core.health += 10;
       for(var i = 0; i<pups.length; i++){
          if(pups[i] == I){
             pups.splice(i, 1);

@@ -1,11 +1,13 @@
 function Weapon(I) {
    // I.width = 4;
    // I.height = 4;
+   I.windstart = 0;
    I.mindmg = 5;
    I.maxdmg = 25;
    I.windupl = 2;
    I.lastfired = -1000;
-   I.windstart = 0;
+   I.lll = -1000;
+   I.lastshot = -1000;
    I.reload = 1;
    I.winding = false;
    I.maxwound = false;

@@ -3,10 +3,8 @@ function Player(I) {
    I.yv = 0;
    I.xc = 0;
    I.yc = 0;
-   I.nx = I.x;
-   I.ny = I.y;
-   I.width = 30;
-   I.height = 30;
+   I.nx = I.core.x;
+   I.ny = I.core.y;
    I.maxv = 20;
    I.grounded = false;
    I.jumpV = 15;
@@ -15,58 +13,55 @@ function Player(I) {
    I.maxjumpsleft = 1;
    I.spacedown = false;
    I.projectiles = [];
-   I.health = 50;
-   I.r = 2+Math.sqrt(I.width*I.width+I.height*I.height)/2;
+   I.r = 2+Math.sqrt(I.core.width*I.core.width+I.core.height*I.core.height)/2;
    I.draw = function() {
-      strokeWeight(1);
-      stroke(this.color);
-      // noFill();
-      fill(this.color);
-      rect(this.x, this.y, this.width, this.height);
-      this.projectiles.forEach(p => {
+      noStroke();
+      fill(I.core.color);
+      rect(I.core.x, I.core.y, I.core.width, I.core.height);
+      I.projectiles.forEach(p => {
          p.draw();
       });
    };
 
    I.update = function() {
-      this.y = this.ny;
-      this.x = this.nx;
+      I.core.y = I.ny;
+      I.core.x = I.nx;
       pups.forEach(pup => {
-         if(simpleCollidesWith(I, pup)){
+         if(simpleCollidesWith(I.core, pup)){
             pup.pick(I);
          }
       });
 
-      if(this.yv+gravity<this.maxv){
-         this.yv += gravity;
+      if(I.yv+gravity<I.maxv){
+         I.yv += gravity;
       }
       if(keyIsDown(65)){
-         this.nx = this.x - this.horiV;
+         I.nx = I.core.x - I.horiV;
       }else if(keyIsDown(68)){
-         this.nx = this.x + this.horiV;
+         I.nx = I.core.x + I.horiV;
       }
       if(keyIsDown(32)){
-         if(!this.spacedown){
-            this.spacedown = true;
-            if(this.grounded){
-               this.yv = -this.jumpV;
-               this.grounded = false;
-            }else if(this.jumpsLeft>0){
-               this.jumpsLeft -= 1;
-               this.yv = -this.jumpV;
-               this.grounded = false;
+         if(!I.spacedown){
+            I.spacedown = true;
+            if(I.grounded){
+               I.yv = -I.jumpV;
+               I.grounded = false;
+            }else if(I.jumpsLeft>0){
+               I.jumpsLeft -= 1;
+               I.yv = -I.jumpV;
+               I.grounded = false;
             }
          }
       }else{
-         this.spacedown = false;
+         I.spacedown = false;
       }
-      constrain(this.yv, -this.maxv, this.maxv);
-      this.ny = this.y + this.yv;
+      constrain(I.yv, -I.maxv, I.maxv);
+      I.ny = I.core.y + I.yv;
 
       var collisions = [];
       var needGravity = true;
       world.forEach(w => {
-         var c = collidesWith({x: this.nx, y: this.ny, width: this.width, height: this.height}, w)
+         var c = collidesWith({x: I.nx, y: I.ny, width: I.core.width, height: I.core.height}, w)
          if(c.col){
             c.obj = w;
             collisions.push(c);
@@ -75,28 +70,28 @@ function Player(I) {
       if(collisions.length>0){
          collisions.forEach(c => {
             if(c.dir==2){ //top
-               this.ny = c.obj.y - this.height;
-               this.yv = 0;
-               this.grounded = true;
-               this.jumpsLeft = this.maxjumpsleft;
+               I.ny = c.obj.y - I.core.height;
+               I.yv = 0;
+               I.grounded = true;
+               I.jumpsLeft = I.maxjumpsleft;
             }else if(c.dir==3){ // right
-               this.nx = c.obj.x + c.obj.width;
+               I.nx = c.obj.x + c.obj.width;
             }else if(c.dir==0){ // bot
-               this.ny = c.obj.y + c.obj.height;
-               this.yv = 0;
+               I.ny = c.obj.y + c.obj.height;
+               I.yv = 0;
             }else{ //left
-               this.nx = c.obj.x - this.width;
+               I.nx = c.obj.x - I.core.width;
             }
          });
       }else{
-         this.grounded = false;
+         I.grounded = false;
       }
-      this.xc = this.x + this.width/2.0;
-      this.yc = this.y + this.height/2.0;
-      this.projectiles.forEach(p => {
+      I.xc = I.core.x + I.core.width/2.0;
+      I.yc = I.core.y + I.core.height/2.0;
+      I.projectiles.forEach(p => {
          p.update();
       });
-      this.equipped.update();
+      I.core.equipped.update();
    };
 
    I.removeProjectile = function(p){
@@ -108,23 +103,23 @@ function Player(I) {
    }
 
    I.mousePressed = function(){
-      if(I.equipped.lastfired+I.equipped.reload*1000<millis()){
-         I.equipped.windup(millis());
+      if(I.core.equipped.lastfired+I.core.equipped.reload*1000<millis()){
+         I.core.equipped.windup(millis());
       }
    };
-   
+
    I.mouseReleased = function(){
       I.shoot();
    };
 
    I.shoot = function(){
-      if(I.equipped.winding){
+      if(I.core.equipped.winding){
          var dmg = 0;
-         dmg = I.equipped.shoot(millis());
-         this.projectiles.push(Projectile({
+         dmg = I.core.equipped.shoot(millis());
+         I.projectiles.push(Projectile({
             xc: I.xc-xhair.uv[0]*I.r,
             yc: I.yc-xhair.uv[1]*I.r,
-            speed: I.equipped.speed,
+            speed: I.core.equipped.speed,
             dmg
          }));
       }
