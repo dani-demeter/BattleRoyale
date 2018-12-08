@@ -16,7 +16,12 @@ const server = require('http').Server(app);
 // websocket server running on the same port as http
 const io = require('socket.io')(server);
 
-db = {};
+var PpL = 2;
+var queue = [];
+
+var db = {};
+
+var lobbies = [];
 
 // towrite = {
 //    hello: {
@@ -33,7 +38,6 @@ db = {};
 
 fs.readFile('serverdb.txt', function(err, data) {
    db = JSON.parse(data);
-   console.log(db);
 });
 
 // which port to listen on, accepts requests from ALL ip addresses
@@ -86,6 +90,40 @@ app.post('/setColor', function (req, res) {
    setColorFor(jsonreq.usr, jsonreq.color);
    res.send({status: 13});
 });
+
+app.post('/enqueue', function (req, res) {
+   queue.push(req.body.usr);
+   var resu = 13;
+   if(queue.length==PpL){
+      resu = 14;
+      var i = nextOpenLobby();
+      if(i!=-1){
+         lobbies[i].empty = false;
+         lobbies[i].players = queue;
+      }else{
+         lobbies.push({
+            empty: false,
+            players: queue
+         });
+         i = lobbies.length-1;
+      }
+      for(var j = 0; j<queue.length; j++){
+         db[queue[j]].currentLobby = i;
+      }
+      queue = [];
+   }
+   console.log("lobbies: ", lobbies);
+   res.send({status: resu});
+});
+
+function nextOpenLobby(){
+   for(var i = 0; i<lobbies.length; i++){
+      if(lobbies[i].empty){
+         return i;
+      }
+   }
+   return -1;
+}
 
 io.on('connection', function(socket) {
   socket.emit('connected', 'Connected to server!');

@@ -4,6 +4,7 @@ var loginButton;
 var signupButton;
 var defaultColor;
 var logoutButton;
+var enqueued = false;
 function setup(){
    cnv = createCanvas(window.innerWidth, window.innerHeight);
    defaultColor = color(28,29,32);
@@ -62,7 +63,27 @@ function rnd(){
 }
 
 function play(){
-   window.location = '/play'
+   if(!enqueued){
+      enqueued = true;
+      httpPost("/enqueue", {usr: readCookie("username"), pass: readCookie("password")}, (res) => {
+         res = JSON.parse(res);
+         if(res.status==13){
+            console.log("ok in queue");
+         }else if(res.status==14){
+            window.location = '/play'
+         }
+      });
+   }
+}
+
+function dequeue(){
+   enqueued = false;
+   httpPost("/dequeue", {usr: readCookie("username"), pass: readCookie("password")}, (res) => {
+      res = JSON.parse(res);
+      if(res.status==13){
+
+      }
+   });
 }
 
 function autoLogin(u, p){
@@ -141,3 +162,7 @@ function logout(){
 function deleteCookie(name) {
     document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 };
+
+window.onbeforeunload = function(e){
+   console.log("ok bye");
+}

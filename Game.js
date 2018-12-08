@@ -7,6 +7,14 @@ var gravity = 1;
 var xhair;
 var allset = false;
 var username;
+var weapons = {
+   phaser: Weapon({
+      speed: 2
+   }),
+   blaster: Weapon({
+      speed: 6
+   })
+};
 function setup(){
    var mycolor;
    username = readCookie("username");
@@ -28,9 +36,7 @@ function continueSetup(mycolor){
          height: 30,
          color: mycolor,
          health: 50,
-         equipped: Weapon({
-            speed: 2
-         })
+         equipped: "phaser"
       }
    });
    players.push(localPlayer);

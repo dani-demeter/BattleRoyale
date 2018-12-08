@@ -91,7 +91,7 @@ function Player(I) {
       I.projectiles.forEach(p => {
          p.update();
       });
-      I.core.equipped.update();
+      weapons[I.core.equipped].update();
    };
 
    I.removeProjectile = function(p){
@@ -103,8 +103,9 @@ function Player(I) {
    }
 
    I.mousePressed = function(){
-      if(I.core.equipped.lastfired+I.core.equipped.reload*1000<millis()){
-         I.core.equipped.windup(millis());
+      var w = weapons[I.core.equipped];
+      if(w.lastfired+w.reload*1000<millis()){
+         w.windup(millis());
       }
    };
 
@@ -113,13 +114,14 @@ function Player(I) {
    };
 
    I.shoot = function(){
-      if(I.core.equipped.winding){
+      var w = weapons[I.core.equipped];
+      if(w.winding){
          var dmg = 0;
-         dmg = I.core.equipped.shoot(millis());
+         dmg = w.shoot(millis());
          I.projectiles.push(Projectile({
             xc: I.xc-xhair.uv[0]*I.r,
             yc: I.yc-xhair.uv[1]*I.r,
-            speed: I.core.equipped.speed,
+            speed: w.speed,
             dmg
          }));
       }

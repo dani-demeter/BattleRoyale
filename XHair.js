@@ -11,7 +11,7 @@ function XHair(I) {
       ellipse(I.xc, I.yc, 2*I.r);
       fill(color(255, 0,0));
       noStroke();
-      ellipse(I.xc, I.yc, constrain(2*(I.p.core.equipped.pdone()*I.r), 0, 2*I.r));
+      ellipse(I.xc, I.yc, constrain(2*(weapons[localPlayer.core.equipped].pdone()*I.r), 0, 2*I.r));
    };
 
    I.update = function() {
