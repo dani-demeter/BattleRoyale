@@ -67,9 +67,8 @@ function play(){
       enqueued = true;
       httpPost("/enqueue", {usr: readCookie("username"), pass: readCookie("password")}, (res) => {
          res = JSON.parse(res);
-         if(res.status==13){
-            console.log("ok in queue");
-         }else if(res.status==14){
+         console.log(res.status);
+         if(res.status==14){
             window.location = '/play'
          }
       });

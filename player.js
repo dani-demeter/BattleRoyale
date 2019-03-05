@@ -14,6 +14,19 @@ function Player(I) {
    I.spacedown = false;
    I.projectiles = [];
    I.r = 2+Math.sqrt(I.core.width*I.core.width+I.core.height*I.core.height)/2;
+
+   //new
+   I.nxs = [];
+   I.nys = [];
+
+   var frames2Predict = 5;
+
+   for(var i = 0; i<frames2Predict; i++){
+      I.nxs.push(I.core.x);
+      I.nys.push(I.core.y);
+   }
+   //endnew
+
    I.draw = function() {
       noStroke();
       fill(I.core.color);
@@ -24,39 +37,54 @@ function Player(I) {
    };
 
    I.update = function() {
-      I.core.y = I.ny;
-      I.core.x = I.nx;
+      // I.core.x = I.nxs[step];
+      // I.core.y = I.nys[step];
+      // I.core.y = I.ny;
+      // I.core.x = I.nx;
       pups.forEach(pup => {
          if(simpleCollidesWith(I.core, pup)){
             pup.pick(I);
          }
       });
-
       if(I.yv+gravity<I.maxv){
          I.yv += gravity;
       }
       if(keyIsDown(65)){
-         I.nx = I.core.x - I.horiV;
-      }else if(keyIsDown(68)){
-         I.nx = I.core.x + I.horiV;
+         // I.nx = I.core.x - I.horiV;
+         movementInputs.left = true;
+         haveInputs = true;
       }
+      if(keyIsDown(68)){
+         // I.nx = I.core.x + I.horiV;
+         movementInputs.right = true;
+         haveInputs = true;
+      }
+      // if(keyIsDown(32)){
+      //    if(!I.spacedown){
+      //       I.spacedown = true;
+      //       if(I.grounded){
+      //          I.yv = -I.jumpV;
+      //          I.grounded = false;
+      //       }else if(I.jumpsLeft>0){
+      //          I.jumpsLeft -= 1;
+      //          I.yv = -I.jumpV;
+      //          I.grounded = false;
+      //       }
+      //    }
+      // }else{
+      //    I.spacedown = false;
+      // }
       if(keyIsDown(32)){
          if(!I.spacedown){
             I.spacedown = true;
-            if(I.grounded){
-               I.yv = -I.jumpV;
-               I.grounded = false;
-            }else if(I.jumpsLeft>0){
-               I.jumpsLeft -= 1;
-               I.yv = -I.jumpV;
-               I.grounded = false;
-            }
+            movementInputs.up = true;
+            haveInputs = true;
          }
       }else{
          I.spacedown = false;
       }
       constrain(I.yv, -I.maxv, I.maxv);
-      I.ny = I.core.y + I.yv;
+      // I.ny = I.core.y + I.yv;
 
       var collisions = [];
       var needGravity = true;

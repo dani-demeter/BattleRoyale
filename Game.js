@@ -7,6 +7,7 @@ var gravity = 1;
 var xhair;
 var allset = false;
 var username;
+var password;
 var weapons = {
    phaser: Weapon({
       speed: 2
@@ -18,8 +19,10 @@ var weapons = {
 function setup(){
    var mycolor;
    username = readCookie("username");
+   password = readCookie("password");
    if(username!=""){
       mycolor = color(parseInt(readCookie("r")), parseInt(readCookie("g")), parseInt(readCookie("b")));
+      setupSocket();
       continueSetup(mycolor);
    }else{
       window.location = '/';
@@ -48,6 +51,7 @@ function continueSetup(mycolor){
    xhair = XHair({
       p: localPlayer
    });
+   socketSend()
    addWorldObject(100,400,400,50,color(255, 199, 0));
    addWorldObject(400,300,400,50,color(255, 199, 0));
    addWorldObject(50,100,50,400,color(255, 199, 0));
@@ -58,15 +62,36 @@ function continueSetup(mycolor){
    allset = true;
 }
 
-var FPS = 60;
+var SPS = 60;
 setInterval(function() {
   gameLoop();
-}, 1000/FPS);
+}, 1000/SPS);
 
+//----------------------------------------------------------------------//
+//                          GAME UPDATE LOOP                            //
+//----------------------------------------------------------------------//
+var step = 0;
+var movementInputs = {};
+var haveInputs = false;
 function gameLoop(){
+   step = (step+1)%(3600);
    recenterCanvas();
    update();
    repaint();
+   sendUpdate();
+}
+
+function sendUpdate(){
+   if(haveInputs){
+      socketSend({
+         request: "update",
+         user: username,
+         pass: password,
+         inputs: movementInputs
+      });
+      movementInputs = {};
+      haveInputs = false;
+   }
 }
 
 function update(){
@@ -82,7 +107,6 @@ function addWorldObject(x, y, w, h, c){
       y,
       width: w,
       height: h,
-      color: c
    }));
 }
 
@@ -131,7 +155,6 @@ function drawHealth(){
    rect(50, window.innerHeight-50, 100, 20);
    fill(color(245, 0,0));
    rect(52, window.innerHeight-48, 96*localPlayer.core.health/100, 16);
-
 }
 
 function mousePressed(){
@@ -142,6 +165,9 @@ function mouseReleased(){
 }
 
 function onServerMessage(msg){
+   if(msg.msg=='xupdate'){
+      localPlayer.core.x = parseInt(msg.tox);
+   }
    console.log(msg);
 }
 
