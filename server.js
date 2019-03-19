@@ -130,7 +130,7 @@ io.on('connection', function(socket) {
       console.log("socket received", data);
       // io.emit sends the event (message) and data to ALL socket connections
       // ie other clients
-      if(data.request!==undefined){
+      if(data!=null && data.request!==undefined){
          var usr = data.user;
          var passw = data.pass;
          if(data.request == "update"){
