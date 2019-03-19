@@ -16,7 +16,7 @@ const server = require('http').Server(app);
 // websocket server running on the same port as http
 const io = require('socket.io')(server);
 
-var PpL = 2;
+var PpL = 1;
 var queue = [];
 
 var db = {};
